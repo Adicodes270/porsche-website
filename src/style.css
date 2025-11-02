@@ -1,0 +1,29 @@
+:root {
+  --bg-main:        #0a0a0a;           
+  --bg-gradient:    linear-gradient(135deg, #0a0a0a 0%, #111111 100%);
+  --text:           #ffffff;
+  
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Porsche Next', sans-serif;
+
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text);
+  min-height: 100vh;
+
+}
