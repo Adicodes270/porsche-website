@@ -4,6 +4,10 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 
+
+
+
+
 const canvas = document.querySelector('#canvas');
 if (!canvas) console.error('Add <canvas id="canvas"></canvas> to index.html');
 
@@ -24,6 +28,35 @@ composer.addPass(new RenderPass(scene, camera));
 
 const pmremGenerator = new THREE.PMREMGenerator(renderer);
 pmremGenerator.compileEquirectangularShader();
+
+// const particleCount = 1000;
+// const particles = new THREE.BufferGeometry();
+// const positions = new Float32Array(particleCount * 3);
+// for (let i = 0; i < particleCount * 3; i++) {
+//   positions[i] = (Math.random() - 0.5) * 20;
+// }
+// particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+// const material = new THREE.PointsMaterial({
+//   color: 'white',
+//   size: 0.05,
+//   transparent:true,
+//   opacity: 1,
+// });
+// const particleSystem = new THREE.Points(particles, material);
+// scene.add(particleSystem);
+
+// function updateParticles() {
+//   particleSystem.rotation.y += 0.001;
+// }
+
+const gridHelper = new THREE.GridHelper(30, 300, 'grey', 'grey');
+gridHelper.material.opacity = 0.1;
+gridHelper.material.transparent = true;
+scene.add(gridHelper);
+
+
+
 
 let model;
 
@@ -61,16 +94,7 @@ new RGBELoader()
     );
 
 
-    // loader.load(
-    //   gltfUrl2,
-    //   (gltf) => {
-    //     const studio = gltf.scene;
-    //     scene.add(studio);
-    //     console.log('STUDIO LOADED');
-    //   },
-    //   (xhr) => console.log('Studio: ' + (xhr.loaded / xhr.total * 100) + '% loaded'),
-    //   (err) => console.error('Studio load error:', err)
-    // );
+
   });
 
 
@@ -83,7 +107,7 @@ new RGBELoader()
 //     texture.dispose();
 //     pmremGenerator.dispose();
 
-//     const gltfUrl2 = new URL('./assets/car-showroom_1.glb', import.meta.url).href;
+//     const gltfUrl2 = new URL('./assets/', import.meta.url).href;
 //     const loader = new GLTFLoader();
 
 
@@ -102,30 +126,59 @@ new RGBELoader()
 //   });
 
 
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      composer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    });
 
-    let mouseX = 0, mouseY = 0;
-    window.addEventListener('mousemove', (e) => {
-      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-      mouseY = (e.clientY / window.innerHeight) * 2 - 1;
-    });
 
-    function animate() {
-      requestAnimationFrame(animate);
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+let mouseX = 0, mouseY = 0;
+let animationProgress = 0;
+let carArrived = false;
 
-      if (model) {
-        const targetX = mouseX * Math.PI * 0.3;
-        const targetY = mouseY * Math.PI * 0.3;
-        model.rotation.y += (targetX - model.rotation.y) * 0.1;
-        model.rotation.x += (targetY - model.rotation.x) * 0.1;
+window.addEventListener('mousemove', (e) => {
+
+  if (!carArrived) return;
+  mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+  mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+});
+
+
+function animate() {
+  requestAnimationFrame(animate);
+  // updateParticles();
+
+  if (model) {
+
+    if (!carArrived) {
+
+      animationProgress += 0.012;
+      const t = Math.min(animationProgress, 1);
+      model.position.z = THREE.MathUtils.lerp(-10, 0, t);
+
+
+
+
+      if (t >= 1) {
+        carArrived = true;
+        model.position.z = 0;
+        console.log('Car arrived in scene 🚘');
       }
-
-      composer.render();
     }
-    animate();
+
+
+    if (carArrived) {
+      const targetX = mouseX * Math.PI * 0.1;
+      const targetY = mouseY * Math.PI * 0.1;
+      model.rotation.y += (targetX - model.rotation.y) * 0.05;
+      model.rotation.x += (targetY - model.rotation.x) * 0.05;
+    }
+  }
+
+  composer.render();
+}
+animate();
+
