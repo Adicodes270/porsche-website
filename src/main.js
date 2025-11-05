@@ -3,6 +3,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+
 
 
 
@@ -67,8 +69,9 @@ scene.fog = new THREE.Fog('black', 1, 15);
 
 let model;
 
+
 new RGBELoader()
-  .load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/qwantani_moonrise_puresky_1k.hdr', (texture) => {
+  .load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/christmas_photo_studio_04_1k.hdr', (texture) => {
     const envMap = pmremGenerator.fromEquirectangular(texture).texture;
     scene.environment = envMap;
     // scene.background = envMap;
@@ -78,6 +81,9 @@ new RGBELoader()
     const gltfUrl1 = new URL('./assets/pagani1.glb', import.meta.url).href;
     // const gltfUrl2 = new URL('./assets/car_studio.glb', import.meta.url).href;
     const loader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');  // CDN for decoder
+    loader.setDRACOLoader(dracoLoader);
 
     loader.load(
       gltfUrl1,
@@ -209,18 +215,19 @@ function animate() {
 
     if (!carArrived) {
 
-      animationProgress += 0.008;
+      animationProgress += 0.010;
       const t = Math.min(animationProgress, 1);
       const ease = t * t * (3 - 2 * t);
       model.position.z = THREE.MathUtils.lerp(-10, 0, ease);
 
-      
+
 
 
       if (t >= 1) {
         carArrived = true;
         model.position.z = 0;
         console.log('Car arrived in scene 🚘');
+
       }
     }
 
@@ -228,13 +235,13 @@ function animate() {
     if (carArrived) {
       const targetX = mouseX * Math.PI * 0.1;
       const targetY = mouseY * Math.PI * 0.1;
-      model.rotation.y += (targetX - model.rotation.y) * 0.05;
-      model.rotation.x += (targetY - model.rotation.x) * 0.05;
-      model.rotation.x = THREE.MathUtils.clamp(model.rotation.x, -0.1, 0.1);
+      model.rotation.y += (targetX - model.rotation.y) * 0.1;
+      model.rotation.x = THREE.MathUtils.clamp(model.rotation.x, -0.2, 0.2);
+      model.rotation.y = THREE.MathUtils.clamp(model.rotation.y, -0.3, 0.3);
 
     }
 
-    
+
   }
 
   composer.render();

@@ -2,13 +2,17 @@
   --bg-main: #0a0a0a;
   --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #111111 100%);
   --text: #ffffff;
+  --font-primary: 'Exo 2', sans-serif;
+  --font-hero: 'Orbitron', sans-serif;
+  --font-body: 'Sora', sans-serif;
+  --transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Exo 2', sans-serif;
+  /* font-family: 'Exo 2', sans-serif; */
 
 }
 
@@ -19,6 +23,7 @@ body {
 }
 
 body {
+  font-family: var(--font-body);
   background: var(--bg-gradient);
   background-attachment: fixed;
   color: var(--text);
@@ -41,9 +46,16 @@ nav {
 
 nav h1 {
   font-size: 3rem;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.3rem;
-
+  font-family: var(--font-hero);
+  animation-delay: 0.2s;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #eeeeee, #2b2a2a);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .container {
@@ -54,7 +66,7 @@ nav h1 {
   text-align: center;
 
   justify-content: center;
-  margin-top: 5rem;
+  margin-top: 3rem;
 }
 
 .hero-section {
@@ -71,28 +83,36 @@ nav h1 {
   max-width: 1000px;
   height: 165px;
   font-size: 4rem;
-  background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9oMCDgTyn_-mdCdN-R-RDvcidoeUrqogYZg&s);
-  background-size: cover;
-  background-position: center;
+  font-family: var(--font-hero);
+  background: linear-gradient(135deg, #fff 0%, #8d8d8d 100%);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  animation-delay: 0.4s;
 }
 
 .hero-section h2 {
 
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 3rem;
+  letter-spacing: 0.08em;
   line-height: 4rem;
   text-align: center;
+  font-family: var(--font-primary);
+  animation-delay: 0.8s;
+  opacity: 0.9;
+  
 
 }
 
-.hero-section h1, .hero-section h2 , nav h1 {
+.hero-section h1,
+.hero-section h2,
+nav h1 {
   opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 1.2s ease forwards;
+  transform: translateY(30px);
+  animation: fadeUp 2s ease forwards;
 }
 
 
@@ -109,8 +129,56 @@ nav h1 {
   position: fixed;
   inset: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   z-index: -1;
+}
 
 
+.cards {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin: 18rem 0;
+}
+
+#card1 {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(223, 227, 235, 0.3);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 50rem;
+  height: 13rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 2s ease forwards;
+}
+
+#card1 h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #eeeeee, #2b2a2a);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  transition: var(--transition-standard);
+}
+
+#card1 h2 {
+  font-size: 1.5rem;
+  color: #e7e7e7;
+
+}
+
+#card1:hover {
+  transform: translateY(-0.5rem) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
 }
