@@ -36,11 +36,14 @@ nav {
   width: 100%;
   top: 0;
   z-index: 1000;
+  backdrop-filter: blur(12px);
 }
 
 nav h1 {
-  font-size: 4rem;
-  font-weight: 600;
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: 0.3rem;
+
 }
 
 .container {
@@ -85,6 +88,21 @@ nav h1 {
   text-align: center;
 
 }
+
+.hero-section h1, .hero-section h2 , nav h1 {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 1.2s ease forwards;
+}
+
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 
 #canvas {

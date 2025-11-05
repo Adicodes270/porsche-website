@@ -8,6 +8,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 
 
 
+
+
 const canvas = document.querySelector('#canvas');
 if (!canvas) console.error('Add <canvas id="canvas"></canvas> to index.html');
 
@@ -19,15 +21,19 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true 
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.6;
+renderer.toneMappingExposure = 0.8;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.setClearColor(0x000000);
+
 
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 
 const pmremGenerator = new THREE.PMREMGenerator(renderer);
 pmremGenerator.compileEquirectangularShader();
+
+
+
 
 // const particleCount = 1000;
 // const particles = new THREE.BufferGeometry();
@@ -55,6 +61,7 @@ gridHelper.material.opacity = 0.1;
 gridHelper.material.transparent = true;
 scene.add(gridHelper);
 
+scene.fog = new THREE.Fog('black', 1, 15);
 
 
 
@@ -96,6 +103,51 @@ new RGBELoader()
 
 
   });
+
+
+
+
+// const gltfUrl1 = new URL('./assets/studio.glb', import.meta.url).href;
+// // const gltfUrl2 = new URL('./assets/car_studio.glb', import.meta.url).href;
+// const loader = new GLTFLoader();
+
+// loader.load(
+//   gltfUrl1,
+//   (gltf) => {
+//     model = gltf.scene;
+//     scene.add(model);
+
+//     const box = new THREE.Box3().setFromObject(model);
+//     const center = box.getCenter(new THREE.Vector3());
+//     model.position.sub(center);
+//     model.position.y = 0.01;
+
+//     const size = box.getSize(new THREE.Vector3());
+//     const maxDim = Math.max(size.x, size.y, size.z);
+//     model.scale.multiplyScalar(2.5 / maxDim);
+
+//     console.log('Pagani model loaded');
+//   },
+//   (xhr) => console.log((xhr.loaded / xhr.total * 100) + '% loaded'),
+//   (err) => console.error('GLTF load error:', err)
+// );
+
+// renderer.shadowMap.enabled = true;
+// renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+// rimLight.castShadow = true;
+// model.traverse(obj => {
+// if (obj.isMesh) obj.castShadow = true;
+// });
+
+
+
+const rimLight = new THREE.DirectionalLight(0xffffff, 0.5);
+rimLight.position.set(0, 2.5, -2);
+scene.add(rimLight);
+
+
+
 
 
 
@@ -144,6 +196,8 @@ window.addEventListener('mousemove', (e) => {
   if (!carArrived) return;
   mouseX = (e.clientX / window.innerWidth) * 2 - 1;
   mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+  // camera.position.x += (x - camera.position.x) * 0.05;
+  // camera.position.y += (y - camera.position.y) * 0.05;
 });
 
 
@@ -155,11 +209,12 @@ function animate() {
 
     if (!carArrived) {
 
-      animationProgress += 0.012;
+      animationProgress += 0.008;
       const t = Math.min(animationProgress, 1);
-      model.position.z = THREE.MathUtils.lerp(-10, 0, t);
+      const ease = t * t * (3 - 2 * t);
+      model.position.z = THREE.MathUtils.lerp(-10, 0, ease);
 
-
+      
 
 
       if (t >= 1) {
@@ -175,7 +230,11 @@ function animate() {
       const targetY = mouseY * Math.PI * 0.1;
       model.rotation.y += (targetX - model.rotation.y) * 0.05;
       model.rotation.x += (targetY - model.rotation.x) * 0.05;
+      model.rotation.x = THREE.MathUtils.clamp(model.rotation.x, -0.1, 0.1);
+
     }
+
+    
   }
 
   composer.render();
