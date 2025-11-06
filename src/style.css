@@ -85,8 +85,7 @@ nav h1 {
 }
 
 .hero-section h1 {
-  max-width: 1000px;
-  height: 165px;
+
   font-size: 4rem;
   font-family: var(--font-hero);
   background: linear-gradient(135deg, #fff 0%, #8d8d8d 100%);
@@ -188,4 +187,105 @@ nav h1 {
   transform: translateY(-0.5rem) !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+@media (max-width: 768px) {
+  nav {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .container {
+    gap: 1.5rem;
+  }
+
+  .hero-section {
+    gap: 1rem;
+  }
+
+  .cards {
+    margin: 6rem 0 4rem 0;
+  }
+
+  #card1 h2 br {
+    display: none;
+  }
+
+  #card1 h2 {
+    white-space: normal;
+  }
+}
+
+@media (max-width: 425px) {
+  nav {
+    padding: 0.8rem 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  nav h1 {
+    letter-spacing: 0.1em;
+    text-align: center;
+    font-size: 2rem;
+  }
+
+  .container {
+    margin-top: 0.5rem;
+    gap: 1rem;
+    padding: 0 1rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-section {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-section h1 {
+    font-size: 2rem;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    text-align: center;
+    width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .hero-section h2 {
+    font-size: 1.5rem;
+    text-align: center;
+    width: 100%;
+    line-height: 2rem;
+    padding: 0 0.5rem;
+  }
+
+  .cards {
+    margin: 20rem 0 2rem 0;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+  }
+
+  #card1 {
+    border-radius: 0.75rem;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    text-align: center;
+  }
+
+  #card1 h1 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  #card1 h2 {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  #card1:hover {
+    transform: translateY(-0.3rem) !important;
+  }
 }
